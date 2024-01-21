@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* Add this CSS to your stylesheet */
+        .container.bg-white {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    
+        .product-item {
+            padding: 15px;
+        }
+    
+        .product {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+    
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+    
+        .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            background-color: #FF5733; /* Adjust the background color as needed */
+            color: white;
+            font-weight: bold;
+        }
+    
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF5733; /* Adjust the price color as needed */
+            margin-top: 5px;
+        }
+
+        /* Style for the larger edit modal */
+        .large-modal .modal-dialog {
+            max-width: 800px;
+        }
+
+        /* Style for the input fields in the larger modal */
+        .large-modal .modal-body input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        #confirmationModal {
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #confirmationModal .modal-dialog {
+        max-width: 400px;
+    }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/mainNav.ejs') %>
+
+    <!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage">Product deleted successfully</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to delete this product?</p>
+        <button id="confirmDelete" class="btn btn-danger">Delete</button>
+        <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
+    </div>
+</div> -->
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-dialog" style="max-width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this product?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDelete" class="btn btn-danger">Delete</button>
+                <button id="cancelDelete" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container bg-white">
+    
+    <!-- Inside your container where you want to display products -->
+    <div class="row">
+        <% if (products.length < 1) { %>
+            <!-- Display a message when there are no products to view -->
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+                <div class="product-item my-3">
+                    <div class="product" style="background-color: #eee; padding: 20px;">
+                        <p>No products to view</p>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+        <% for (let i = 0; i < products.length; i++) { %>
+        <div class="col-lg-3 col-md-4 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+            <div class="product-item my-3">
+                <div class="product">
+                  <img src="<%= products[i].imageUrl %>" alt="<%= products[i].name %>">
+                  <!-- Other product details -->
+                  <div class="tag bg-red"><%= products[i].category %></div>
+                  <div class="title pt-2 pb-1"><a href="#"><%= products[i].name %></a></div>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                    <span class="fas fa-star"></span>
+                  </div>
+                  <div class="price">N<%= products[i].price %></div>
+                  <!-- Edit and Delete buttons -->
+                  <button type="button" class="btn btn-success edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<%= products[i].id %>"
+                    data-id="<%= products[i].id %>"
+                    data-name="<%= products[i].name %>"
+                    data-category="<%= products[i].category %>"
+                    data-description="<%= products[i].description %>"
+                    data-price="<%= products[i].price %>"
+                    data-image="<%= products[i].imageUrl %>">
+                    Edit
+                  </button>
+                  <a href="#" class="btn btn-danger delete-btn" data-id="<%= products[i].id %>">Delete</a>
+
+                  
+                </div>
+              </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+
+<!-- Edit Product Modal -->
+<div class="modal fade large-modal" id="editModal<%= products[i].id %>" tabindex="-1" aria-labelledby="editModalLabel<%= products[i].id %>" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel<%= products[i].id %>">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/products/update/<%= products[i].id %>" method="POST">
+                    <!-- Product Name -->
+                    <div class="form-group">
+                        <label for="editName<%= products[i].id %>">Product Name</label>
+                        <input type="text" class="form-control" id="editName<%= products[i].id %>" name="name" placeholder="Enter product name" required value="<%= products[i].name %>">
+                    </div>
+
+                    <!-- Brand Name -->
+                    <div class="form-group">
+                        <label for="editBrand<%= products[i].id %>">Brand Name</label>
+                        <input type="text" class="form-control" id="editBrand<%= products[i].id %>" name="brand" placeholder="Enter brand name" required value="<%= products[i].brand %>">
+                    </div>
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="editCategory<%= products[i].id %>">Category</label>
+                        <select class="form-control" id="editCategory<%= products[i].id %>" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="Clothing & Apparel">Clothing & Apparel</option>
+                            <option value="Footwear & Shoes">Footwear & Shoes</option>
+                            <option value="Electronics & Gadgets">Electronics & Gadgets</option>
+                            <option value="Games & Toys">Games & Toys</option>
+                            <option value="Veterinary & Pet Items">Veterinary & Pet Items</option>
+                            <option value="Stationery">Stationery</option>
+                            <option value="Hand & Power Tools">Hand & Power Tools</option>
+                            <option value="Tupperware">Drinks</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Sports Products">Sports Products</option>
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="editDescription<%= products[i].id %>">Product Description</label>
+                        <textarea class="form-control" id="editDescription<%= products[i].id %>" name="description" rows="3" placeholder="Enter product description" required><%= products[i].description %></textarea>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="form-group">
+                        <label for="editPrice<%= products[i].id %>">Price</label>
+                        <input type="number" class="form-control" id="editPrice<%= products[i].id %>" name="price" placeholder="Enter price" required min="0" value="<%= products[i].price %>">
+                    </div>
+
+                    <!-- Count in Stock -->
+                    <div class="form-group">
+                        <label for="editCountInStock<%= products[i].id %>">Count in Stock</label>
+                        <input type="number" class="form-control" id="editCountInStock<%= products[i].id %>" name="countInStock" placeholder="Enter count in stock" required min="1" value="<%= products[i].countInStock %>">
+                    </div>
+
+                    <!-- Image URL -->
+                    <div class="form-group">
+                        <label for="editImageUrl<%= products[i].id %>">Image URL</label>
+                        <input type="text" class="form-control" id="editImageUrl<%= products[i].id %>" name="imageUrl" placeholder="Enter image URL" required value="<%= products[i].imageUrl %>">
+                    </div>
+                    <button type="submit" class="btn btn-success">Edit</button>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <% } %>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer.ejs') %>
+
+<script>
+    $('.delete-btn').on('click', function () {
+        const productId = $(this).data('id');
+        
+        // Set the product ID in the confirmation modal
+        $('#confirmDelete').data('id', productId);
+    
+        // Show the confirmation modal
+        $('#confirmationModal').show();
+    });
+    
+    $('#confirmDelete').on('click', function () {
+        const productId = $(this).data('id');
+    
+        // Redirect to the delete route with the product ID
+        window.location.href = `/products/delete/${productId}`;
+    });
+    
+    $('#cancelDelete').on('click', function () {
+        // Hide the confirmation modal
+        $('#confirmationModal').hide();
+    });
+    </script>
+    
+    
+    
+    
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- Add Bootstrap JS script links here -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+</body>
+</html>

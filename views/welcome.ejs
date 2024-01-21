@@ -1,0 +1,146 @@
+</html><!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* Add this CSS to your stylesheet */
+        .container.bg-white {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    
+        .product-item {
+            padding: 15px;
+        }
+    
+        .product {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+    
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+    
+        .icons {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            list-style: none;
+            padding: 0;
+        }
+    
+        .icons li {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+    
+        .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            background-color: #FF5733; /* Adjust the background color as needed */
+            color: white;
+            font-weight: bold;
+        }
+    
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF5733; /* Adjust the price color as needed */
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/login-register-nav') %>
+        <!-- <h1>Welcome to BuyAll </h1> -->
+
+
+<!-- Full-width Bootstrap Carousel -->
+<div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="3000"> <!-- Set data-interval to 1000 milliseconds (1 second) -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://www.optus.com.au/content/dam/optus/images/for-you/connected/news/introducing-iphone-15-series-article-banner.jpg/renditions/version-1694666766242/original.jpeg" class="d-block w-100 img-fluid rounded" alt="Image 1">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.ourdailydose.net/media/wysiwyg/WEB_1_1_.jpg" class="d-block w-100 img-fluid rounded" alt="Image 2">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.brydenstt.com/wp-content/uploads/2021/02/Brydens-Website-Banner-ciroc-01-min.jpg" class="d-block w-100 img-fluid rounded" alt="Image 3">
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.uploadvr.com/content/images/2020/06/EaQsP3EUwAA8fOr.jpg" class="d-block w-100 img-fluid rounded" alt="Image 4">
+        </div>
+        <!-- Add more carousel items as needed -->
+    </div>
+</div>
+
+
+<!-- Space between Carousel and Next Content -->
+<div class="mt-5">
+    <!-- <h2>Next Content Goes Here</h2> -->
+    <!-- Add your next content here -->
+</div>
+
+
+<div class="container bg-white">
+    <!-- Inside your container where you want to display products -->
+    <div class="row">
+        <% for (let i = 0; i < products.length; i++) { %>
+        <div class="col-lg-3 col-md-4 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+          <div class="product">
+            <img src="<%= products[i].imageUrl %>" alt="<%= products[i].name %>">
+
+            <!-- Other product details -->
+            <div class="tag bg-red"><%= products[i].category %></div>
+            <div class="title pt-2 pb-1"><a href="#"><%= products[i].name %></a></div>
+            <!-- Add rating here if available in your database -->
+            <!-- For simplicity, let's assume a static rating -->
+            <div class="d-flex align-items-center justify-content-center">
+              <span class="fas fa-star"></span>
+              <span class="fas fa-star"></span>
+              <span class="fas fa-star"></span>
+              <span class="fas fa-star"></span>
+              <span class="fas fa-star"></span>
+            </div>
+            <div class="price">N<%= products[i].price %></div>
+          </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+    
+
+<%- include('partials/footer.ejs') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- Add Bootstrap JS script links here -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+
+<!-- Start Carousel When Page Loads -->
+
+<script>
+    $(document).ready(function(){
+        $('#carouselExample').carousel();
+    });
+</script>
+    </body>
+</html>
+

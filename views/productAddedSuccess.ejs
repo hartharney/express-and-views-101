@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+
+
+        <!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Product Added Successfully</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Your product has been added successfully.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="backToHomeBtn" data-bs-dismiss="modal">Back to Home</button>
+          </div>
+          
+      </div>
+    </div>
+  </div>
+
+  
+  
+
+    <%- include('partials/footer') %>
+<!-- JavaScript to show the success modal -->
+<script>
+    // JavaScript to handle the success modal display and navigation
+    $(document).ready(function () {
+      // Check if a product was successfully added (you can use a flag or condition here)
+      const productAddedSuccessfully = true; // Set to true if the product was added successfully
+  
+      if (productAddedSuccessfully) {
+        $('#successModal').modal('show'); // Show the success modal
+  
+        // Add a click event handler to the "Back to Home" button
+        $('#backToHomeBtn').click(function () {
+          window.location.href = '/users/home'; // Navigate to /users/home
+        });
+      }
+    });
+  </script>
+</body>
+</html>

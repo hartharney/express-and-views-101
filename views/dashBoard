@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    <h1>User Dashboard</h1>
+    <!-- Display user-related content -->
+    <%- include('partials/footer') %>
+</body>
+</html>
