@@ -28,11 +28,6 @@ header h1 {
   font-size: 24px;
 }
 
-/* Login - Register - Nav */
-/* Styling for the login-register-nav class */
-
-/* Custom CSS styles can be added here */
-/* Custom CSS styles can be added here */
 
 
 /* Form styles */
@@ -125,11 +120,11 @@ footer {
 }
 
 
-/* Add more styles as needed */
+
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
-  /* Adjust styles for smaller screens */
+  
   header h1 {
       font-size: 20px;
   }
